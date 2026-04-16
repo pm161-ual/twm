@@ -20,6 +20,9 @@ coverage
 # nyc test coverage
 .nyc_output
 
+# Test results
+test-results
+
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
@@ -59,3 +62,6 @@ typings/
 
 # next.js build output
 .next
+
+# mongoose data
+data
