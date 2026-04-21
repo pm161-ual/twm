@@ -10,6 +10,7 @@
     "test:ci": "jest --coverage --ci"
   },
   "dependencies": {
+    "axios": "^1.15.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.22.1",

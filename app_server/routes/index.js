@@ -1,15 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-const ctrlLocation = require('../controllers/locations');
+const ctrlLocations = require('../controllers/locations');
 const ctrlOthers = require('../controllers/others');
+/* Location pages. */
+router.get('/', ctrlLocations.homeList);
+router.get('/location/:locationId', ctrlLocations.locationInfo);
+router.get('/location/:locationId/review/new', ctrlLocations.addReview);
+router.post('/location/:locationId/review/new', ctrlLocations.doAddReview);
 
-
-/* Location page. */
-router.get('/', ctrlLocation.homeList);
-router.get('/location/', ctrlLocation.locationInfo);
-router.get('/location/review/new', ctrlLocation.addReview);
-
-/* Others. */
+/* Others */
 router.get('/about', ctrlOthers.about);
 module.exports = router;

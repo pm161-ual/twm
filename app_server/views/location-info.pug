@@ -1,63 +1,51 @@
 extends layout
 
+include _includes/sharedHTMLfunctions
+
 block content
-    .row.banner     
+    .row.banner 
         .col-12 
-            h1 Starcups        
-    .row
-        .col-12.col-lg-9 
+            h1 #{location.name} 
+    .row 
+        .col-12.col-lg-9
             .row
                 .col-12.col-md-6
-                    p.rating
-                        i.fas.fa-star 
-                        i.fas.fa-star
-                        i.fas.fa-star
-                        i.far.fa-star
-                        i.far.fa-star
-                    p.address 125 High Street, Reading, RG6 1PS
-                    .card.card-primary.mb-3  
-                        .card-body
-                            h2.card-title Opening hours
-                            p.card-text Monday - Friday: 7:00am - 7:00pm
-                            p.card-text Saturday: 8:00am - 5:00pm
-                            p.card-text Sunday:closed
-                    .card.card-primary 
-                        .card-body
-                            h2.card-title Facilities
-                            span.badge.badge-warning Hot drink 
-                            span.badge.badge-warning Food 
-                            span.badge.badge-warning Premium wifi
+                    p
+                        +outputRating(location.rating)
+                    p #{location.address}
+                    each openingTimes in location.openingTimes
+                        .card.card-primary
+                            .card-body 
+                                h2.card-title #{openingTimes.days} 
+                                p.card-text #{openingTimes.opening} - #{openingTimes.closing}
+                                if !openingTimes.closed
+                                    p.card-text Open today
+                                else
+                                    p.card-text Closed today
+                    .card.card-primary
+                    .card-body 
+                        h2.card-title Facilities 
+                        each facility in location.facilities
+                            span.badge.badge-warning #{facility}
                 .col-12.col-md-6 
                     .card.card-primary 
-                        .card-body
-                            h2 Location map
+                        .card-body  
+                            h2.card-title Location Map #{location.coords}
                             img(src="https://placehold.co/200x200")
-        
-            .row.mt-3
-            .card.card-primary
-                .card-body
-                    h2.card-title Customer reviews
-                     a.btn.btn-secondary.float-right(href='/location/review/new') Add review     
-                    div.bg-primary.text-white.p-2.mb-3  
-                        small &nbsp;
-                            i.fas.fa-star 
-                            i.fas.fa-star
-                            i.fas.fa-star
-                            i.far.fa-star
-                            i.far.fa-star
-                            span.ml-2 Simon Holmes 16 February 2019     
-                    div
-                    p.ml-2 What a great place.
-                    div.bg-primary.text-white.p-2.mb-3  
-                        small &nbsp;
-                            i.fas.fa-star 
-                            i.fas.fa-star
-                            i.fas.fa-star
-                            i.fas.fa-star
-                            i.far.fa-star
-                            span.ml-2 Antonio Becerra 14 February 2019    
-                    div
-        .col-12.col-lg-3  
-            p.lead Starcups is a local cafe chain with some of the best coffee in town. They have free wifi and plenty of space to work, so it's a great place to go if you need to get some work done. 
-            p.lead If you've been and you like it or if you don't, please leave a review to help other people just like you.   
-                            
+            .row 
+                .col-12
+                        .card.card-primary 
+                            .card-body
+                                h2.card-title Customer reviews
+                                    a.btn.btn-secondary.float-right(href=`/location/${location._id}/review/new`) Add Review
+                                each review in location.reviews
+                                    p.card-text
+                                        span 
+                                            +outputRating(review.rating)
+                                        span #{review.author} 
+                                        span.date #{review.date}
+                                    p.card-text #{review.text}
+        .col-12.col-lg-3 
+            p #{location.name} is on Loc8r because it has accessible wifi and space to sit down with your laptop and get some work done.
+            p If you've been and you like it or if you don't, please leave a review to help other people just like you.
+                       
