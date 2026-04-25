@@ -3,7 +3,7 @@ name: TWM CI
 on:
   push:
   pull_request:
-   branches: [master]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -12,21 +12,10 @@ jobs:
     container: node:22-alpine
 
     steps:
-      - name: Install git
-        run: apk add --no-cache git
-      - uses: actions/checkout@v4
-      - name: Configure Git safe directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-      - name: Install dependencies
-        run: |
-          npm ci
-      - name: Run tests
-        run: |
-          npm test
-      - name: Test Report
-        uses: dorny/test-reporter@v3
-        if: ${{ !cancelled() }}
-        with:
-          name: JEST Tests
-          path: reports/junit/junit.xml
-          reporter: jest-junit
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        npm ci
+    - name: Run tests
+      run: |
+        npm test
