@@ -25,8 +25,8 @@ jobs:
           npm test
       - name: Test Report
         uses: dorny/test-reporter@v3
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && hashFiles('test-results/junit.xml') != '' }}
         with:
           name: JEST Tests
-          path: reports/junit/junit.xml
+          path: test-results/junit.xml
           reporter: jest-junit
