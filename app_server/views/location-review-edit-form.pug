@@ -1,0 +1,25 @@
+extends layout
+
+block content
+    .row.banner 
+        .col-12 
+            h1 Edit Review for "#{location.name}"
+    .row 
+        .col-12.col-lg-9
+            form(action=`/location/${location._id}/review/${review._id}/edit` method="POST")
+                .form-group 
+                    label(for="name") Name 
+                    input.form-control(type="text" id="name" name="name" value=review.author)
+                .form-group 
+                    label(for="rating") Rating 
+                    select.form-control(id="rating" name="rating")
+                        option(selected=review.rating == 0) 0
+                        option(selected=review.rating == 1) 1
+                        option(selected=review.rating == 2) 2
+                        option(selected=review.rating == 3) 3
+                        option(selected=review.rating == 4) 4
+                        option(selected=review.rating == 5) 5
+                .form-group 
+                    label(for="review")
+                    textarea.form-control(id="review" name="review")= review.reviewText
+                button.btn.btn-primary(type="submit") Update Review

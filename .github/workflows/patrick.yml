@@ -14,7 +14,8 @@ jobs:
     steps:
       - name: Install git
         run: apk add --no-cache git
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - name: Configure Git safe directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Install dependencies
         run: |

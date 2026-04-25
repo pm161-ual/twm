@@ -46,6 +46,24 @@ const addReview = async (req, res) => {
         res.render('error', {error: err, message: "API lookup error"});
     }
 }
+const editReview = async (req, res) => {
+    const locationPath = `/api/locations/${req.params.locationId}`;
+    const reviewPath = `/api/locations/${req.params.locationId}/reviews/${req.params.reviewId}`;
+    try {
+        const [location, review] = await Promise.all([
+            axios.get(`${apiOptions.server}${locationPath}`),
+            axios.get(`${apiOptions.server}${reviewPath}`)
+        ]);
+        res.render('location-review-edit-form', {
+            title: 'Edit Review',
+            location: location.data,
+            review: review.data
+        });
+    } catch (err) {
+        console.error(err);
+        res.render('error', {error: err, message: "API lookup error"});
+    }
+}
 const doAddReview = async (req, res) => {
     const path = `/api/locations/${req.params.locationId}/reviews`;
     const postData = {
@@ -65,11 +83,40 @@ const doAddReview = async (req, res) => {
         res.render('error', {error: err, message: "API lookup error"});
     }
 }
+const doEditReview = async (req, res) => {
+    const path = `/api/locations/${req.params.locationId}/reviews/${req.params.reviewId}`;
+    const putData = {
+        author: req.body.name,
+        rating: req.body.rating,
+        reviewText: req.body.review
+    };
+
+    try {
+        await axios.put(`${apiOptions.server}${path}`, putData);
+        res.redirect(`/location/${req.params.locationId}`);
+    } catch (err) {
+        console.error(err);
+        res.render('error', {error: err, message: "API lookup error"});
+    }
+}
+const doDeleteReview = async (req, res) => {
+    const path = `/api/locations/${req.params.locationId}/reviews/${req.params.reviewId}`;
+    try {
+        await axios.delete(`${apiOptions.server}${path}`);
+        res.redirect(`/location/${req.params.locationId}`);
+    } catch (err) {
+        console.error(err);
+        res.render('error', {error: err, message: "API lookup error"});
+    }
+}
 
 
 module.exports = {
     homeList,
     locationInfo,
     addReview,
-    doAddReview
+    editReview,
+    doAddReview,
+    doEditReview,
+    doDeleteReview
 }

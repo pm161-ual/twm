@@ -55,7 +55,56 @@ const reviewsCreate = async (req, res) => {
     }
 } 
 
+const reviewsUpdate = async (req, res) => {
+    try {
+        const location = await Loc.findById(req.params.locationId)
+                                .select("name reviews").exec();
+        if(!location)
+            return res.status(404).json({message: "Location not found"});
+
+        const review = location.reviews.id(req.params.reviewId);
+        if(!review)
+            return res.status(404).json({message: "Review not found"});
+
+        review.author = req.body.author;
+        review.rating = req.body.rating;
+        review.reviewText = req.body.reviewText;
+
+        const savedLocation = await location.save();
+        return res.status(200).json(savedLocation.reviews.id(req.params.reviewId));
+    } catch (err) {
+        console.error(err.message);
+        if(err.name === "CastError")
+            return res.status(400).json({message: "Bad Request"})
+        res.status(500).json({message: "Unknown Error"});
+    }
+}
+
+const reviewsDelete = async (req, res) => {
+    try {
+        const location = await Loc.findById(req.params.locationId)
+                                .select("name reviews").exec();
+        if(!location)
+            return res.status(404).json({message: "Location not found"});
+
+        const review = location.reviews.id(req.params.reviewId);
+        if(!review)
+            return res.status(404).json({message: "Review not found"});
+
+        review.deleteOne();
+        await location.save();
+        return res.status(204).json();
+    } catch (err) {
+        console.error(err.message);
+        if(err.name === "CastError")
+            return res.status(400).json({message: "Bad Request"})
+        res.status(500).json({message: "Unknown Error"});
+    }
+}
+
 module.exports = {
     reviewsReadOne,
-    reviewsCreate
+    reviewsCreate,
+    reviewsUpdate,
+    reviewsDelete
 }
